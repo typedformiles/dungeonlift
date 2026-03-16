@@ -2853,15 +2853,11 @@ class Game {
 const game = new Game();
 
 // Draw pixel Neuralift icon — downsample the real logo into chunky pixels
-(function drawPixelLogo() {
-    const c = document.getElementById('pixel-logo');
-    if (!c) return;
-    const ctx = c.getContext('2d');
+(function drawPixelLogos() {
+    const ids = ['pixel-logo', 'pixel-logo-gameover', 'pixel-logo-victory'];
     const img = new Image();
     img.onload = function () {
-        const grid = 16; // 16x16 pixel grid
-        const pxSize = c.width / grid;
-        // Draw the image tiny, then read it back
+        const grid = 16;
         const tmp = document.createElement('canvas');
         tmp.width = grid;
         tmp.height = grid;
@@ -2869,14 +2865,20 @@ const game = new Game();
         tctx.drawImage(img, 0, 0, grid, grid);
         const data = tctx.getImageData(0, 0, grid, grid).data;
 
-        ctx.clearRect(0, 0, c.width, c.height);
-        for (let y = 0; y < grid; y++) {
-            for (let x = 0; x < grid; x++) {
-                const i = (y * grid + x) * 4;
-                const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-                if (a < 80) continue; // skip transparent
-                ctx.fillStyle = `rgb(${r},${g},${b})`;
-                ctx.fillRect(x * pxSize, y * pxSize, pxSize, pxSize);
+        for (const id of ids) {
+            const c = document.getElementById(id);
+            if (!c) continue;
+            const ctx = c.getContext('2d');
+            const pxSize = c.width / grid;
+            ctx.clearRect(0, 0, c.width, c.height);
+            for (let y = 0; y < grid; y++) {
+                for (let x = 0; x < grid; x++) {
+                    const i = (y * grid + x) * 4;
+                    const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                    if (a < 80) continue;
+                    ctx.fillStyle = `rgb(${r},${g},${b})`;
+                    ctx.fillRect(x * pxSize, y * pxSize, pxSize, pxSize);
+                }
             }
         }
     };
