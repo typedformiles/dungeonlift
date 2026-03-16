@@ -2852,50 +2852,33 @@ class Game {
 
 const game = new Game();
 
-// Draw pixel Neuralift icon on title screen
+// Draw pixel Neuralift icon — downsample the real logo into chunky pixels
 (function drawPixelLogo() {
     const c = document.getElementById('pixel-logo');
     if (!c) return;
     const ctx = c.getContext('2d');
-    const s = 4; // pixel size
+    const img = new Image();
+    img.onload = function () {
+        const grid = 16; // 16x16 pixel grid
+        const pxSize = c.width / grid;
+        // Draw the image tiny, then read it back
+        const tmp = document.createElement('canvas');
+        tmp.width = grid;
+        tmp.height = grid;
+        const tctx = tmp.getContext('2d');
+        tctx.drawImage(img, 0, 0, grid, grid);
+        const data = tctx.getImageData(0, 0, grid, grid).data;
 
-    const light = '#9b3fff';
-    const dark = '#7E0CF7';
-    const deep = '#5a08b0';
-
-    // Top-left parallelogram
-    const topLeft = [
-        [4,1],[5,1],[6,1],[7,1],
-        [3,2],[4,2],[5,2],[6,2],[7,2],
-        [2,3],[3,3],[4,3],[5,3],[6,3],
-        [1,4],[2,4],[3,4],[4,4],[5,4],
-        [1,5],[2,5],[3,5],[4,5],
-        [1,6],[2,6],[3,6],[4,6],
-        [1,7],[2,7],[3,7],
-    ];
-
-    // Bottom-right parallelogram
-    const botRight = [
-        [12,8],[13,8],[14,8],
-        [11,9],[12,9],[13,9],[14,9],
-        [11,10],[12,10],[13,10],[14,10],
-        [10,11],[11,11],[12,11],[13,11],[14,11],
-        [9,12],[10,12],[11,12],[12,12],[13,12],
-        [8,13],[9,13],[10,13],[11,13],
-        [8,14],[9,14],[10,14],
-    ];
-
-    // Connecting diagonal stem
-    const stem = [
-        [5,5],[6,5],
-        [5,6],[6,6],[7,6],
-        [6,7],[7,7],[8,7],
-        [7,8],[8,8],[9,8],
-        [8,9],[9,9],[10,9],
-        [9,10],[10,10],
-    ];
-
-    for (const [x, y] of topLeft) { ctx.fillStyle = light; ctx.fillRect(x * s, y * s, s, s); }
-    for (const [x, y] of botRight) { ctx.fillStyle = dark; ctx.fillRect(x * s, y * s, s, s); }
-    for (const [x, y] of stem) { ctx.fillStyle = deep; ctx.fillRect(x * s, y * s, s, s); }
+        ctx.clearRect(0, 0, c.width, c.height);
+        for (let y = 0; y < grid; y++) {
+            for (let x = 0; x < grid; x++) {
+                const i = (y * grid + x) * 4;
+                const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                if (a < 80) continue; // skip transparent
+                ctx.fillStyle = `rgb(${r},${g},${b})`;
+                ctx.fillRect(x * pxSize, y * pxSize, pxSize, pxSize);
+            }
+        }
+    };
+    img.src = 'neuralift-icon.png';
 })();
