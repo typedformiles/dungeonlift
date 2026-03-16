@@ -141,11 +141,11 @@ body {
 }
 
 .neuralift-pixel-icon {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
-    filter: drop-shadow(0 0 12px rgba(126, 12, 247, 0.6)) drop-shadow(0 0 30px rgba(126, 12, 247, 0.25));
+    filter: drop-shadow(0 0 15px rgba(126, 12, 247, 0.7)) drop-shadow(0 0 35px rgba(126, 12, 247, 0.3));
 }
 
 .logo-underline {
