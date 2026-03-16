@@ -2884,7 +2884,7 @@ const game = new Game();
 
 // Draw pixel Neuralift icon — downsample the real logo into chunky pixels
 (function drawPixelLogos() {
-    const ids = ['pixel-logo', 'pixel-logo-gameover', 'pixel-logo-victory'];
+    const ids = ['pixel-logo', 'pixel-logo-gameover', 'pixel-logo-victory', 'pixel-logo-mobile'];
     const img = new Image();
     img.onload = function () {
         const grid = 16;
@@ -2913,4 +2913,20 @@ const game = new Game();
         }
     };
     img.src = 'neuralift-icon.png';
+})();
+
+// Mobile landing page — URL copy handler
+(function setupMobileLanding() {
+    const url = 'https://typedformiles.github.io/dungeonlift';
+    const urlText = document.getElementById('mobile-url-text');
+    const copyBtn = document.getElementById('mobile-copy-btn');
+    if (urlText) urlText.textContent = url;
+    if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(url).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
+            });
+        });
+    }
 })();

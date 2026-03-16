@@ -7,6 +7,47 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Mobile landing page -->
+    <div id="mobile-landing" class="mobile-landing">
+        <div class="mobile-landing-inner">
+            <div class="mobile-logo">DUNGEON<span class="mobile-logo-lift">LIFT</span></div>
+            <canvas id="pixel-logo-mobile" width="64" height="64" class="neuralift-pixel-icon"></canvas>
+            <p class="mobile-tagline">A Neuralift Game</p>
+
+            <div class="mobile-hero-text">
+                <p>Fight the enemies of insight.</p>
+                <p>Discover hidden customer segments.</p>
+                <p>Find Neuralift.</p>
+            </div>
+
+            <div class="mobile-preview">
+                <div class="mobile-preview-row">
+                    <span class="mobile-enemy" style="color:#ff6644">N</span> Noise
+                    <span class="mobile-enemy" style="color:#ff8844">B</span> Bias
+                    <span class="mobile-enemy" style="color:#4488ff">S</span> Silo
+                </div>
+                <div class="mobile-preview-row">
+                    <span class="mobile-enemy" style="color:#ffaa00">R</span> Rules
+                    <span class="mobile-enemy" style="color:#44bb44">X</span> Spreadsheet
+                    <span class="mobile-enemy" style="color:#ff44ff">Q</span> SQL Boss
+                </div>
+            </div>
+
+            <p class="mobile-desktop-msg">Best played on desktop or laptop</p>
+
+            <div class="mobile-url-box">
+                <span class="mobile-url-text" id="mobile-url-text"></span>
+                <button class="mobile-copy-btn" id="mobile-copy-btn">Copy link</button>
+            </div>
+
+            <div class="mobile-cta">
+                <p>Neuralift discovers what rules-based tools miss.</p>
+                <a href="https://neuralift.ai" target="_blank" class="pixel-btn mobile-cta-btn">Learn About Neuralift →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop game -->
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         <div id="hud">
