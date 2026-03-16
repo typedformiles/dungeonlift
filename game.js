@@ -1136,7 +1136,19 @@ class Game {
         if (available.length === 0) { this.usedQuestions.clear(); for (let i = 0; i < QUIZ_QUESTIONS.length; i++) available.push(i); }
         const idx = available[Math.floor(Math.random() * available.length)];
         this.usedQuestions.add(idx);
-        return QUIZ_QUESTIONS[idx];
+
+        // Shuffle answer positions so correct isn't always in the same slot
+        const orig = QUIZ_QUESTIONS[idx];
+        const indices = [0, 1, 2, 3];
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        return {
+            q: orig.q,
+            answers: indices.map(i => orig.answers[i]),
+            correct: indices.indexOf(orig.correct),
+        };
     }
 
     showQuiz(chest) {
