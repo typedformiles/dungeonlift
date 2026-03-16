@@ -136,6 +136,18 @@ body {
         0 0 60px rgba(126, 12, 247, 0.4);
 }
 
+.title-icon {
+    margin: 10px 0 6px;
+}
+
+.neuralift-pixel-icon {
+    width: 56px;
+    height: 56px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 12px rgba(126, 12, 247, 0.6)) drop-shadow(0 0 30px rgba(126, 12, 247, 0.25));
+}
+
 .logo-underline {
     height: 4px;
     margin: 8px auto 0;
