@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DungeonLift — A Neuralift Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="hud">
+            <div id="hud-left">
+                <span id="hud-lives"></span>
+                <span id="hud-level">Level: 1</span>
+            </div>
+            <div id="hud-right">
+                <span id="hud-score">Segments: 0</span>
+            </div>
+        </div>
+        <div id="message-log"></div>
+
+        <!-- Title Screen -->
+        <div id="title-screen" class="overlay">
+            <div class="overlay-content">
+                <div class="logo-container">
+                    <h1 class="title-logo">DUNGEON<span class="title-lift">LIFT</span></h1>
+                    <div class="logo-underline"></div>
+                </div>
+                <p class="subtitle">A Neuralift Game</p>
+                <div class="title-lore">
+                    <p>Your data warehouse holds secrets — hidden customer segments that rules-based tools will never find.</p>
+                    <p>Descend through the Data Dungeon. Explore rooms to reveal chests and trigger battles. Collect items. Answer questions to unlock segments. Defeat the SQL QUERY boss.</p>
+                </div>
+                <div class="controls-info">
+                    <p><strong>Arrow keys / WASD</strong> — Move (explore) &amp; navigate (battle)</p>
+                    <p><strong>Enter / Space</strong> — Confirm action in battle</p>
+                    <p><strong>I or E</strong> — Open inventory (view items, use potions)</p>
+                    <p><strong>Enter a room</strong> — Reveals chests, may trigger a battle</p>
+                    <p><strong>Walk into a chest</strong> — Answer a question or find items</p>
+                    <p><strong>Find the <span style="color:#7E0CF7">&#9660;</span> staircase</strong> — Descend deeper</p>
+                    <p style="color:#f0c040; margin-top:6px">Find Neuralift to unlock everything.</p>
+                </div>
+                <button id="start-btn" class="pixel-btn">CHOOSE YOUR CHARACTER</button>
+            </div>
+        </div>
+
+        <!-- Character Select Screen -->
+        <div id="charselect-screen" class="overlay" style="display:none">
+            <div class="overlay-content">
+                <h1 class="charselect-title">CHOOSE YOUR HERO</h1>
+                <p class="subtitle">All heroes share the same quest. Pick the one that speaks to you.</p>
+                <div class="char-grid" id="char-grid"></div>
+                <p class="char-hint">&#9650;&#9660; or click to select, then press ENTER or click BEGIN</p>
+                <button id="char-start-btn" class="pixel-btn" style="margin-top:12px">BEGIN DESCENT</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="overlay" style="display:none">
+            <div class="overlay-content">
+                <h1 class="title-glow gameover-title">GAME OVER</h1>
+                <p class="subtitle" id="gameover-subtitle">The noise consumed you...</p>
+                <div id="gameover-stats"></div>
+                <div id="gameover-segments"></div>
+                <div id="gameover-hint" class="gameover-hint" style="display:none"></div>
+                <div class="gameover-actions">
+                    <button id="retry-btn" class="pixel-btn">TRY AGAIN</button>
+                    <a href="https://neuralift.ai" target="_blank" class="pixel-btn cta-btn">Learn About Neuralift →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="victory-screen" class="overlay" style="display:none">
+            <div class="overlay-content victory-content">
+                <div class="victory-header">
+                    <div class="victory-logo">DUNGEON<span class="victory-logo-lift">LIFT</span></div>
+                    <h1 class="victory-complete">DUNGEON COMPLETE</h1>
+                </div>
+
+                <div class="victory-score-box">
+                    <div id="victory-stats" class="victory-stats-grid"></div>
+                </div>
+
+                <div class="victory-segments-box">
+                    <div class="victory-segments-header">Segments Discovered</div>
+                    <div id="victory-segments" class="victory-segments-list"></div>
+                </div>
+
+                <div class="victory-cta">
+                    <div class="victory-cta-header">You found hidden segments in a dungeon.<br>Imagine what's hiding in your real data.</div>
+                    <p class="victory-cta-body">Neuralift's AI-powered Segmenter discovers customer segments that rules-based tools miss. No SQL. No bias. No guesswork. Just discovery.</p>
+                    <a href="https://neuralift.ai" target="_blank" class="pixel-btn cta-btn">Discover What You're Missing →</a>
+                </div>
+
+                <div class="victory-actions">
+                    <button id="replay-btn" class="pixel-btn replay-btn">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
