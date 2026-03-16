@@ -350,12 +350,10 @@ body {
 /* Victory Screen */
 .victory-content {
     max-width: 750px;
-    max-height: 700px;
-    overflow-y: auto;
 }
 
 .victory-header {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .victory-logo {
@@ -384,8 +382,8 @@ body {
     background: rgba(26, 16, 40, 0.6);
     border: 1px solid #3d2466;
     border-radius: 4px;
-    padding: 14px 20px;
-    margin-bottom: 16px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
 }
 
 .victory-stats-grid {
@@ -401,7 +399,7 @@ body {
 }
 
 .victory-stat-value {
-    font-size: 22px;
+    font-size: 18px;
     color: #f0c040;
     display: block;
     margin-bottom: 6px;
@@ -419,8 +417,8 @@ body {
     background: rgba(26, 16, 40, 0.4);
     border: 1px solid #2a1848;
     border-radius: 4px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
+    padding: 10px 16px;
+    margin-bottom: 10px;
 }
 
 .victory-segments-header {
@@ -522,8 +520,8 @@ body {
 
 .victory-cta {
     border: 1px solid #7E0CF7;
-    padding: 18px 20px;
-    margin-bottom: 16px;
+    padding: 12px 18px;
+    margin-bottom: 10px;
     border-radius: 4px;
     background: linear-gradient(135deg, rgba(126, 12, 247, 0.1), rgba(126, 12, 247, 0.04));
 }
