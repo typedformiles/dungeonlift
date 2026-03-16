@@ -6,7 +6,7 @@ A pixel-art dungeon crawler built as a GTM tool for [Neuralift](https://neuralif
 
 ## The Game
 
-You're a data professional descending through the Data Dungeon, fighting the enemies of insight and discovering hidden customer segments. Find Neuralift to unlock everything.
+You're a customer data professional descending through the Data Dungeon, fighting the enemies of insight in order to find hidden customer segments. The dungeon is hard, but if you can unearth Neuralift in a chest you'll be powered up and unlock everything!
 
 ### Choose Your Hero
 - **Alex Chen** — Data Analyst
@@ -46,6 +46,6 @@ Pure HTML5 Canvas + vanilla JS. No dependencies, no build step. Runs entirely cl
 
 ## About Neuralift
 
-Neuralift is a customer and business context engine that sits on top of the data warehouse. It uses deep learning to discover customer segments that rules-based tools miss — no SQL, no bias, no guesswork.
+Neuralift is a deep learning segmentation discovery tool that plug into your data warehouse. It uses a patented neural network approach to discover customer segments that rules-based tools miss — no SQL, no bias, no guesswork.
 
 [neuralift.ai](https://neuralift.ai)
