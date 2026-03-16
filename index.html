@@ -63,7 +63,14 @@
                 <p class="subtitle" id="gameover-subtitle">The noise consumed you...</p>
                 <div id="gameover-stats"></div>
                 <div id="gameover-segments"></div>
-                <div id="gameover-hint" class="gameover-hint" style="display:none"></div>
+                <div id="gameover-hint" class="gameover-hint-box" style="display:none">
+                    <div class="gameover-hint-icon">?</div>
+                    <div id="gameover-hint-text" class="gameover-hint-text"></div>
+                </div>
+                <div class="share-actions">
+                    <button id="gameover-copy-btn" class="share-btn copy-btn">📋 Copy Score</button>
+                    <a id="gameover-linkedin-btn" class="share-btn linkedin-btn" target="_blank">in Share on LinkedIn</a>
+                </div>
                 <div class="gameover-actions">
                     <button id="retry-btn" class="pixel-btn">TRY AGAIN</button>
                     <a href="https://neuralift.ai" target="_blank" class="pixel-btn cta-btn">Learn About Neuralift →</a>
@@ -94,6 +101,10 @@
                     <a href="https://neuralift.ai" target="_blank" class="pixel-btn cta-btn">Discover What You're Missing →</a>
                 </div>
 
+                <div class="share-actions">
+                    <button id="victory-copy-btn" class="share-btn copy-btn">📋 Copy Score</button>
+                    <a id="victory-linkedin-btn" class="share-btn linkedin-btn" target="_blank">in Share on LinkedIn</a>
+                </div>
                 <div class="victory-actions">
                     <button id="replay-btn" class="pixel-btn replay-btn">Play Again</button>
                 </div>

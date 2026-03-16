@@ -1673,20 +1673,85 @@ class Game {
         while (log.children.length > 3) log.removeChild(log.firstChild);
     }
 
+    // --------------------------------------------------------
+    // SHARING
+    // --------------------------------------------------------
+
+    getGameUrl() {
+        return 'https://typedformiles.github.io/dungeonlift';
+    }
+
+    generateScorecard(won) {
+        const lines = [];
+        lines.push('\u{1F3F0} DungeonLift by Neuralift');
+        lines.push('');
+
+        if (won) {
+            lines.push(`\u2694\uFE0F DUNGEON COMPLETE | \u{1F3AF} ${this.segmentsFound.length} Segments | \u2764\uFE0F ${this.lives} Lives Left`);
+        } else {
+            lines.push(`\u{1F480} Defeated on Level ${this.level} | \u{1F3AF} ${this.segmentsFound.length} Segments`);
+        }
+
+        if (this.neuraliftActive) {
+            lines.push('\u{1F7E3} NEURALIFTED!');
+        } else {
+            lines.push('\u{1F534} Never found Neuralift...');
+        }
+
+        lines.push('');
+
+        if (this.segmentsFound.length > 0) {
+            const segsToShow = this.segmentsFound.slice(0, 5);
+            for (const s of segsToShow) {
+                lines.push(`\u2726 ${s}`);
+            }
+            if (this.segmentsFound.length > 5) {
+                lines.push(`...and ${this.segmentsFound.length - 5} more`);
+            }
+            lines.push('');
+        }
+
+        lines.push('Can you survive the Data Dungeon?');
+        lines.push(`\u{1F3AE} ${this.getGameUrl()}`);
+
+        return lines.join('\n');
+    }
+
+    copyScorecard(won, buttonId) {
+        const text = this.generateScorecard(won);
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById(buttonId);
+            btn.textContent = '\u2705 Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = '\u{1F4CB} Copy Score';
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+
+    getLinkedInShareUrl(won) {
+        const text = this.generateScorecard(won);
+        return `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`;
+    }
+
     showGameOver(source) {
         const s = document.getElementById('gameover-screen');
         document.getElementById('gameover-subtitle').textContent = `Defeated by ${source} on Level ${this.level}`;
         document.getElementById('gameover-stats').innerHTML = `Score: ${this.score}<br>Levels: ${this.level - 1}/${TOTAL_LEVELS}<br>Segments: ${this.segmentsFound.length}`;
         document.getElementById('gameover-segments').innerHTML = this.segmentsFound.length > 0 ? this.segmentsFound.map(seg => `\u2726 ${seg}`).join('<br>') : 'No segments discovered...';
 
-        // Different message if you never found Neuralift
         const hint = document.getElementById('gameover-hint');
         if (!this.neuraliftActive) {
-            hint.innerHTML = 'You never found Neuralift.<br>Manual tools can only take you so far — deep learning would have changed everything.';
+            document.getElementById('gameover-hint-text').innerHTML = '<strong>You never found Neuralift.</strong>Manual tools can only take you so far — deep learning would have changed everything.';
             hint.style.display = 'block';
         } else {
             hint.style.display = 'none';
         }
+
+        // Share buttons
+        document.getElementById('gameover-copy-btn').onclick = () => this.copyScorecard(false, 'gameover-copy-btn');
+        document.getElementById('gameover-linkedin-btn').href = this.getLinkedInShareUrl(false);
 
         s.style.display = 'flex';
     }
@@ -1716,6 +1781,10 @@ class Game {
         // Segments as tags
         document.getElementById('victory-segments').innerHTML =
             this.segmentsFound.map(seg => `<span class="seg-tag">\u2726 ${seg}</span>`).join('');
+
+        // Share buttons
+        document.getElementById('victory-copy-btn').onclick = () => this.copyScorecard(true, 'victory-copy-btn');
+        document.getElementById('victory-linkedin-btn').href = this.getLinkedInShareUrl(true);
 
         s.style.display = 'flex';
     }
