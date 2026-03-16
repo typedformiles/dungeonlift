@@ -216,7 +216,7 @@ const ITEM_DEFS = {
     },
     attention_head: {
         name: 'Attention Head', icon: '\u2299', color: '#ff44aa',
-        desc: 'Your next attack in combat will be a critical hit dealing 2x damage.',
+        desc: 'Your next attack in combat will be a critical hit dealing 3x damage.',
         context: 'Battle',
         battleUse: true, exploreUse: false,
         effect: (battle) => {
@@ -253,12 +253,27 @@ const NEURALIFT_DEF = {
     desc: 'The Segmenter. Discovers everything.',
 };
 
-// Item drop tables per level range
+// Item drop tables — weighted by rarity
+// Common items appear ~3x more often than rare
 function getRandomItem(level) {
-    const pool = ['gpu_shield', 'denoiser', 'batch_normalizer', 'dropout_layer', 'neural_cloak'];
-    if (level >= 2) pool.push('hyperparameterizer', 'attention_head');
-    if (level >= 3) pool.push('regularizer', 'lr_scheduler');
-    return pool[Math.floor(Math.random() * pool.length)];
+    const pool = [
+        // Common (weight 3)
+        ['batch_normalizer', 3],
+        ['denoiser', 3],
+        ['dropout_layer', 3],
+        ['neural_cloak', 3],
+        // Uncommon (weight 2) — available from level 2+
+        ...(level >= 2 ? [['gpu_shield', 2], ['hyperparameterizer', 2]] : []),
+        // Rare (weight 1) — available from level 3+
+        ...(level >= 3 ? [['attention_head', 1], ['regularizer', 1], ['lr_scheduler', 1]] : []),
+    ];
+    const totalWeight = pool.reduce((sum, [, w]) => sum + w, 0);
+    let roll = Math.random() * totalWeight;
+    for (const [item, weight] of pool) {
+        roll -= weight;
+        if (roll <= 0) return item;
+    }
+    return pool[0][0];
 }
 
 function getChestWeapon(level) {
@@ -609,9 +624,9 @@ class Battle {
             this.playerBuffs.lrBonus++;
         }
         if (this.playerBuffs.critical) {
-            dmg *= 2;
+            dmg *= 3;
             this.playerBuffs.critical = false;
-            this.log.push('CRITICAL HIT!');
+            this.log.push('CRITICAL HIT! 3x DAMAGE!');
         }
 
         this.enemy.hp = Math.max(0, this.enemy.hp - dmg);
@@ -1220,6 +1235,21 @@ class Game {
                 }
             }
         }
+
+        // D or Delete to dispose of an item for +1 HP
+        if (key === 'd' || key === 'D' || key === 'Delete' || key === 'Backspace') {
+            if (this.invSelectedIdx === 0) return; // Can't dispose weapon
+
+            const itemIdx = this.invSelectedIdx - 1;
+            const itemKey = this.inventory[itemIdx];
+            const def = ITEM_DEFS[itemKey];
+
+            this.inventory.splice(itemIdx, 1);
+            this.player.hp = Math.min(this.player.maxHp, this.player.hp + 1);
+            this.invSelectedIdx = Math.min(this.invSelectedIdx, this.inventory.length);
+            this.addMessage(`Salvaged ${def.name} for +1 HP`, 'info');
+            this.updateHUD();
+        }
     }
 
     renderInventory() {
@@ -1335,10 +1365,10 @@ class Game {
             // "Use" prompt if selected and usable
             if (isSelected && def.exploreUse) {
                 ctx.fillStyle = '#44ff44'; ctx.font = '7px "Press Start 2P", monospace';
-                ctx.fillText('ENTER to use', px + panelW - 20, slotY + 40);
+                ctx.fillText('ENTER use  |  D salvage', px + panelW - 20, slotY + 40);
             } else if (isSelected && !def.exploreUse) {
                 ctx.fillStyle = '#666'; ctx.font = '7px "Press Start 2P", monospace';
-                ctx.fillText('Battle only', px + panelW - 20, slotY + 40);
+                ctx.fillText('Battle only  |  D salvage', px + panelW - 20, slotY + 40);
             }
 
             slotY += slotH + 4;
@@ -1346,7 +1376,7 @@ class Game {
 
         // Footer
         ctx.fillStyle = '#555'; ctx.font = '8px "Press Start 2P", monospace'; ctx.textAlign = 'center';
-        ctx.fillText('\u2191\u2193 navigate  |  ENTER use  |  I / ESC close', W / 2, py + panelH - 16);
+        ctx.fillText('\u2191\u2193 navigate  |  ENTER use  |  D salvage (+1 HP)  |  ESC close', W / 2, py + panelH - 16);
     }
 
     // --------------------------------------------------------
