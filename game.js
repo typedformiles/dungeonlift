@@ -2734,48 +2734,78 @@ class Game {
         ctx.fillStyle = 'rgba(9, 0, 22, 0.85)';
         ctx.fillRect(0, 0, W, H);
 
-        const boxW = 620, boxH = 280;
-        const boxX = (W - boxW) / 2, boxY = (H - boxH) / 2;
+        const boxW = Math.min(900, W - 40);
+        const boxX = (W - boxW) / 2;
+        const answerFont = '8px "Press Start 2P", monospace';
+        const answerInnerW = boxW - 80; // space for number + padding
+
+        // Pre-calculate answer heights (wrap long answers)
+        ctx.font = answerFont;
+        const answerWrapped = q.answers.map(a => this.wrapText(a, answerInnerW, ctx));
+        const answerRowH = answerWrapped.map(lines => Math.max(30, lines.length * 16 + 14));
+
+        // Question
+        ctx.font = '9px "Press Start 2P", monospace';
+        const qLines = this.wrapText(q.q, boxW - 40, ctx);
+
+        // Calculate total box height
+        const headerH = 32;
+        const qH = qLines.length * 18 + 20;
+        const ansH = answerRowH.reduce((a, b) => a + b, 0) + (q.answers.length - 1) * 6;
+        const footerH = 34;
+        const boxH = headerH + qH + ansH + footerH + 10;
+        const boxY = Math.max(10, (H - boxH) / 2);
 
         ctx.fillStyle = '#1a1028';
         ctx.fillRect(boxX, boxY, boxW, boxH);
         ctx.strokeStyle = '#7E0CF7'; ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxW, boxH);
 
-        ctx.fillStyle = '#7E0CF7'; ctx.fillRect(boxX, boxY, boxW, 32);
+        // Header
+        ctx.fillStyle = '#7E0CF7'; ctx.fillRect(boxX, boxY, boxW, headerH);
         ctx.fillStyle = '#fff'; ctx.font = 'bold 11px "Press Start 2P", monospace';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('UNLOCK SEGMENT', W / 2, boxY + 16);
+        ctx.fillText('UNLOCK SEGMENT', W / 2, boxY + headerH / 2);
 
-        ctx.fillStyle = '#e0d0ff'; ctx.font = '10px "Press Start 2P", monospace'; ctx.textAlign = 'left';
-        const lines = this.wrapText(q.q, boxW - 40, ctx);
-        let textY = boxY + 52;
-        for (const line of lines) { ctx.fillText(line, boxX + 20, textY); textY += 18; }
+        // Question text
+        ctx.fillStyle = '#e0d0ff'; ctx.font = '9px "Press Start 2P", monospace'; ctx.textAlign = 'left';
+        let textY = boxY + headerH + 18;
+        for (const line of qLines) { ctx.fillText(line, boxX + 20, textY); textY += 18; }
 
-        const answerY = boxY + 110;
+        // Answers
+        let ay = textY + 10;
         for (let i = 0; i < q.answers.length; i++) {
-            const ay = answerY + i * 38;
+            const rowH = answerRowH[i];
             const isChosen = this.quizResult && this.quizResult.chosen === i;
             const isCorrect = i === q.correct;
 
+            // Background
             if (this.quizResult) {
                 ctx.fillStyle = isCorrect ? 'rgba(68,255,68,0.15)' : (isChosen && !this.quizResult.correct ? 'rgba(255,68,68,0.15)' : 'rgba(255,255,255,0.03)');
             } else {
                 ctx.fillStyle = 'rgba(255,255,255,0.05)';
             }
-            ctx.fillRect(boxX + 16, ay, boxW - 32, 30);
+            ctx.fillRect(boxX + 16, ay, boxW - 32, rowH);
             ctx.strokeStyle = this.quizResult ? (isCorrect ? '#44ff44' : (isChosen ? '#ff4444' : '#333')) : '#3d2466';
-            ctx.lineWidth = 1; ctx.strokeRect(boxX + 16, ay, boxW - 32, 30);
+            ctx.lineWidth = 1; ctx.strokeRect(boxX + 16, ay, boxW - 32, rowH);
 
+            // Number
             ctx.fillStyle = this.quizResult ? '#666' : '#7E0CF7';
             ctx.font = 'bold 10px "Press Start 2P", monospace'; ctx.textAlign = 'left';
             ctx.fillText(`${i + 1}`, boxX + 26, ay + 18);
 
+            // Answer text (wrapped)
             ctx.fillStyle = this.quizResult ? (isCorrect ? '#44ff44' : (isChosen && !this.quizResult.correct ? '#ff4444' : '#666')) : '#ccc';
-            ctx.font = '9px "Press Start 2P", monospace';
-            ctx.fillText(q.answers[i], boxX + 54, ay + 18);
+            ctx.font = answerFont;
+            const aLines = answerWrapped[i];
+            for (let l = 0; l < aLines.length; l++) {
+                ctx.fillText(aLines[l], boxX + 54, ay + 16 + l * 16);
+            }
+
+            ay += rowH + 6;
         }
 
+        // Footer
         if (this.quizResult) {
             ctx.textAlign = 'center'; ctx.font = 'bold 12px "Press Start 2P", monospace';
             ctx.fillStyle = this.quizResult.correct ? '#f0c040' : '#ff4444';
